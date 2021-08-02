@@ -5,6 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "dev": "node_modules/.bin/nodemon src/index.ts",
+    "build" : "tsc",
+    "prod" : "node build/src/index.js",
     "migrate:up": "node_modules/.bin/knex migrate:up",
     "migrate:down": "node_modules/.bin/knex migrate:down",
     "test": "node_modules/.bin/jest",
