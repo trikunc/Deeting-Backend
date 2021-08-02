@@ -9,7 +9,7 @@
     "migrate:down": "node_modules/.bin/knex migrate:down",
     "test": "node_modules/.bin/jest"
   },
-  "author": "",
+  "author": "Hanan asyrawi Rivai",
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.12",
@@ -34,9 +34,7 @@
     "knex-cli": "^1.0.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "mysql2": "^2.2.5",
     "nodemon": "^2.0.12",
-    "pg": "^8.7.1",
     "redis": "^3.1.2",
     "supertest": "^6.1.4",
     "swagger-jsdoc": "^6.1.0",
