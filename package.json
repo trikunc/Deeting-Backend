@@ -7,7 +7,8 @@
     "dev": "node_modules/.bin/nodemon src/index.ts",
     "migrate:up": "node_modules/.bin/knex migrate:up",
     "migrate:down": "node_modules/.bin/knex migrate:down",
-    "test": "node_modules/.bin/jest"
+    "test": "node_modules/.bin/jest",
+    "seed:run" : "node_modules/.bin/knex seed:run"
   },
   "author": "Hanan asyrawi Rivai",
   "license": "ISC",
