@@ -1,0 +1,23 @@
+{
+    "swaggerDefinition": {
+      "info": {
+        "title": "User Service API",
+        "description": "17miles",
+        "version": "1.0.0",
+        "contact": {
+          "name": "Hanan Asyrawi Rivai"
+        },
+        "servers": ["localhost:5000"]
+      },
+      "schemes": ["http"],
+      "tags": [
+        {
+          "name": "User Services",
+          "description": "User Service include with Authorization base on roles"
+        }
+      ],
+      "host": "localhost:5000",
+      "basePath": "/"
+    },
+    "apis": ["**/controllers/*.ts"]
+  }
