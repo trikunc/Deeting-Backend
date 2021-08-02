@@ -1,5 +1,6 @@
+import { Knex } from "knex"
 import * as config from "../knexfile"
 
-const knex = require('knex')(config)
+const knex: Knex = require('knex')(config)
 
 export { knex }
