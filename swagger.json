@@ -1,23 +1,21 @@
 {
-    "swaggerDefinition": {
-      "info": {
-        "title": "User Service API",
-        "description": "17miles",
-        "version": "1.0.0",
-        "contact": {
-          "name": "Hanan Asyrawi Rivai"
-        },
-        "servers": ["localhost:5000"]
+  "swaggerDefinition": {
+    "info": {
+      "title": "User Service API",
+      "description": "17miles",
+      "version": "1.0.0",
+      "contact": {
+        "name": "Hanan Asyrawi Rivai"
       },
-      "schemes": ["http"],
-      "tags": [
-        {
-          "name": "User Services",
-          "description": "User Service include with Authorization base on roles"
-        }
-      ],
-      "host": "localhost:5000",
-      "basePath": "/"
+      "servers": [
+        "localhost:5000"
+      ]
     },
-    "apis": ["**/controllers/*.ts"]
-  }
+    "schemes": [
+      "http"
+    ],
+    "host": "localhost:5000",
+    "basePath": "/"
+  },
+  "apis": ["./src/routes/*.ts"]
+}
