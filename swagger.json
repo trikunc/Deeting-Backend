@@ -17,5 +17,5 @@
     "host": "localhost:5000",
     "basePath": "/"
   },
-  "apis": ["./src/routes/*.ts"]
+  "apis": ["./src/controller/*.ts"]
 }
