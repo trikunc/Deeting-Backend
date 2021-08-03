@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { WebResponse } from "../models/WebResponse"
-import { getAllUser, getUser as getUserServices } from "../services/user.services"
+import { WebResponse } from "../../models/WebResponse"
+import { getAllUser, getUser as getUserServices, registerUser } from "../../services/user.services"
 
 class UserController {
     /**
@@ -53,6 +53,18 @@ class UserController {
     async users(req: Request, res: Response) {
         let users = await getAllUser()
         return WebResponse.success(res, users)
+    }
+    /**
+     * @param  {Request} request from express 
+     * @param  {Response} response from express
+    */
+    async createUser(req: Request, res: Response) {
+        let { body } = req
+        
+        return await res.json({
+            message: "User created successfully",
+            body : body
+        })
     }
 }
 

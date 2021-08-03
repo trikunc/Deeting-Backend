@@ -6,7 +6,13 @@ import { knex as connection } from "../../database"
  * @param {User} user
 */
 const registerUser = async (user: User): Promise<User> => {
-    return await connection.insert(user)
+    return await connection<User>("users").insert({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        displayName: user.displayName,
+        avatar: user.avatar,
+    })
 }
 /**
  * get specific user
