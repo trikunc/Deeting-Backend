@@ -60,10 +60,16 @@ class UserController {
     */
     async createUser(req: Request, res: Response) {
         let { body } = req
-        
+        try {
+            await registerUser(body)
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message
+            })
+        }
         return await res.json({
             message: "User created successfully",
-            body : body
+            body: body
         })
     }
 }

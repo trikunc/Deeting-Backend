@@ -2,16 +2,18 @@ import { NextFunction, Request, Response } from "express"
 import joi from "joi"
 
 const validation = joi.object({
-    userName: joi.string().alphanum().min(3).max(25).trim(true).required(),
+    username: joi.string().alphanum().min(3).max(25).trim(true).required(),
     email: joi.string().email().trim(true).required(),
     password: joi.string().min(8).trim(true).required(),
+    displayName : joi.string()
 })
 
 export const userValidation = (req: Request, res: Response, next: NextFunction) => {
     const validationResult = validation.validate({
-        userName: req.body.userName,
+        username: req.body.username,
         email : req.body.email,
         password: req.body.password,
+        displayName: req.body.displayName,
     })
 
     if (validationResult.error) {
