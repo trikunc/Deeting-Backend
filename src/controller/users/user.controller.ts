@@ -57,6 +57,39 @@ class UserController {
     /**
      * @param  {Request} request from express 
      * @param  {Response} response from express
+     * @swagger
+     * /users:
+     *  post:
+     *   tags:
+     *      - "user_service"
+     *   summary: "Register User"
+     *   description: "User Creation"
+     *   consumes:
+     *     - "application/json"
+     *   produces:
+     *     -"application/json"
+     *    
+     *   body:
+     *      required: true
+     *      schemas:
+     *          - $ref: "#/definitions/User"
+     *                  
+     *   responses:
+     *      200:
+     *        description: "A successful response"
+     *      500:
+     *        description: "Internal server error"
+     * 
+     * definitions:
+     *  User:
+     *    type: "object"
+     *    properties:
+     *      username:
+     *          type: "string"
+     *      email:
+     *          type: "string"
+     *      password:
+     *          type: "string"
     */
     async createUser(req: Request, res: Response) {
         let { body } = req
