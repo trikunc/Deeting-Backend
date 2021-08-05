@@ -57,47 +57,45 @@ class UserController {
         return WebResponse.success(res, users)
     }
     /**
-     * @param  {Request} request from express 
-     * @param  {Response} response from express
-     * @swagger
-     * /users:
-     *  post:
-     *   tags:
-     *      - "user_service"
-     *   summary: "Register User"
-     *   description: "User Creation"
-     *   consumes:
-     *     - "application/json"
-     *   produces:
-     *     -"application/json"
-     *    
-     *   body:
-     *      required: true
-     *      schemas:
-     *          - $ref: "#/definitions/User"
-     *                  
-     *   responses:
-     *      200:
-     *        description: "A successful response"
-     *      500:
-     *        description: "Internal server error"
-     * 
-     * definitions:
-     *  User:
-     *    type: "object"
-     *    properties:
-     *      username:
-     *          type: "string"
-     *      email:
-     *          type: "string"
-     *      password:
-     *          type: "string"
+    * @swagger
+    * /users:
+    *  post:
+    *      description: Receives a zipped and base64 encoded user
+    *      consumes: 
+    *         - application/json
+    *      parameters:
+    *          - in: body
+    *            name: "Request Body"
+    *            description: "User Creation"
+    *            schema:
+    *              type: object
+    *              required:
+    *                  - username
+    *              properties:
+    *                  username:
+    *                      type: string
+    *                  password:
+    *                       type: string
+    *                  email:
+    *                      type: string
+    *                  avatar:
+    *                      type: string
+    *      responses:
+    *          '201':
+    *              description: user received and uploaded successfully
+    *          '400':
+    *              description: user data is missing or invalid
+    *          '500':
+    *              description: Internal server error
+    *      
+    *  
+    *           
     */
     async createUser(req: Request, res: Response) {
         let { body } = req
         let password = await hashingPassword(req.body.password)
-        let encrypted : User = {
-            name : body.name,
+        let encrypted: User = {
+            name: body.name,
             username: body.username,
             email: body.email,
             password: password,
