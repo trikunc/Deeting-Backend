@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { generateAccessToken } from "../../helper/genarateAccessToken";
 import { comparePassword } from "../../helper/hashing_password";
 import { loginService } from "../../services/auth.service";
 
@@ -9,7 +10,14 @@ class AuthController {
             loginService(email).then(user => {
                 comparePassword(password, user.password)
                     .then(isMatch => {
-                        return isMatch ? res.json(user) : res.status(401).json({ err: "Password Not Match" })
+                        let token = generateAccessToken({
+                            id: user.id,
+                            name: user.username,
+                            email: user.email,
+                            roles: { name: "admin" } // todo change to roles from database 
+                        })
+
+                        return isMatch ? res.json(token) : res.status(401).json({ err: "Password Not Match" })
                     })
             })
         } catch (error) {
