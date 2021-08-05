@@ -4,6 +4,35 @@ import { comparePassword } from "../../helper/hashing_password";
 import { loginService } from "../../services/auth.service";
 
 class AuthController {
+    /**
+    * @swagger
+    * /login:
+    *  post:
+    *      description: User Login
+    *      tags: [ "auth" ]
+    *      consumes: 
+    *         - application/json
+    *      parameters:
+    *          - in: body
+    *            name: "Request Body"
+    *            description: "User Login"
+    *            schema:
+    *              type: object
+    *              required:
+    *                  - username
+    *              properties:
+    *                  email:
+    *                    type: string
+    *                  password:
+    *                    type: string
+    *      responses:
+    *          '201':
+    *              description: user received and uploaded successfully
+    *          '400':
+    *              description: user data is missing or invalid
+    *          '500':
+    *              description: Internal server error
+    */
     async login(req: Request, res: Response) {
         const { email, password } = req.body;
         try {

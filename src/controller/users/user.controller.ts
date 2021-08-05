@@ -60,7 +60,8 @@ class UserController {
     * @swagger
     * /users:
     *  post:
-    *      description: Receives a zipped and base64 encoded user
+    *      description: User registration
+    *      tags: [user_service]
     *      consumes: 
     *         - application/json
     *      parameters:
