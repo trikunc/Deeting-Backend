@@ -1,4 +1,6 @@
+import { User } from "entity/User"
 import { Request, Response } from "express"
+import { hashingPassword } from "../../helper/hashing_password"
 import { WebResponse } from "../../models/WebResponse"
 import { getAllUser, getUser as getUserServices, registerUser } from "../../services/user.services"
 
@@ -93,8 +95,18 @@ class UserController {
     */
     async createUser(req: Request, res: Response) {
         let { body } = req
+        let password = await hashingPassword(req.body.password)
+        let encrypted : User = {
+            name : body.name,
+            username: body.username,
+            email: body.email,
+            password: password,
+            displayName: body.displayName,
+            avatar: body.avatar
+        }
+
         try {
-            await registerUser(body)
+            await registerUser(encrypted)
         } catch (error) {
             return res.status(500).json({
                 message: error.message
