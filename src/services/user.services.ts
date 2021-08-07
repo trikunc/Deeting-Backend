@@ -13,7 +13,7 @@ const registerUser = async (user: User): Promise<User> => {
         email: user.email,
         password: user.password,
         avatar: user.avatar,
-    })  
+    })
 }
 /**
  * get specific user
@@ -31,8 +31,20 @@ const getAllUser = async (): Promise<User[]> => {
     return await connection("users").select("*").limit(10).orderBy("id", "desc")
 }
 
+/**
+ * Upadte the user
+ * @param number user id
+ * @param {User} user
+*/
+const updateProfileService = async (userId: number, user: object) => {
+    return connection<User>("users").where({
+        id: userId,
+    }).update(user)
+}
+
 export {
     registerUser,
     getUser,
-    getAllUser
+    getAllUser,
+    updateProfileService
 }

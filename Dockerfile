@@ -1,5 +1,4 @@
-
-FROM node:13
+FROM node:14.17.4-alpine3.14
 LABEL author="Hanan Asyrawi Rivai (asyrawih@gmail.com)"
 WORKDIR /app
 COPY package.json ./
