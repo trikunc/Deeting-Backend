@@ -2,7 +2,7 @@ import { User } from "entity/User"
 import { Request, Response } from "express"
 import { hashingPassword } from "../../helper/hashing_password"
 import { WebResponse } from "../../models/WebResponse"
-import { getAllUser, getUser as getUserServices, registerUser } from "../../services/user.services"
+import { getAllUser, getUser as getUserServices, registerUser, updateProfileService } from "../../services/user.services"
 
 class UserController {
     /**
@@ -96,7 +96,6 @@ class UserController {
         let { body } = req
         let password = await hashingPassword(req.body.password)
         let encrypted: User = {
-            name: body.name,
             username: body.username,
             email: body.email,
             password: password,
@@ -115,6 +114,31 @@ class UserController {
             message: "User created successfully",
             body: body
         })
+    }
+
+    /**
+     * Update profile
+     * @param {Request} req
+     * @param {Response} res}
+    */
+    async updateProfile(req: Request, res: Response) {
+        
+        let { id } = req.params
+        let { body } = req
+        let password = await hashingPassword(body.password)
+
+        const user: User = {
+            username: body.username,
+            email: body.email,
+            password: password,
+            displayName: body.displayName,
+            avatar: body.avatar
+        }
+
+        await updateProfileService(parseInt(id), user)
+
+        return WebResponse.success(res, user)
+
     }
 }
 

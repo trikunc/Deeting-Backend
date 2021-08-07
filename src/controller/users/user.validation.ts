@@ -5,13 +5,13 @@ const validation = joi.object({
     username: joi.string().alphanum().min(3).max(25).trim(true).required(),
     email: joi.string().email().trim(true).required(),
     password: joi.string().min(8).trim(true).required(),
-    displayName : joi.string()
+    displayName: joi.string()
 })
 
 export const userValidation = (req: Request, res: Response, next: NextFunction) => {
     const validationResult = validation.validate({
         username: req.body.username,
-        email : req.body.email,
+        email: req.body.email,
         password: req.body.password,
         displayName: req.body.displayName,
     })
@@ -24,4 +24,3 @@ export const userValidation = (req: Request, res: Response, next: NextFunction) 
 
     next()
 }
-
