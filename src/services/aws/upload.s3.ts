@@ -1,4 +1,5 @@
 import aws from "aws-sdk"
+import { Request } from "express"
 import multer from "multer"
 import multers3 from "multer-s3"
 
@@ -14,8 +15,8 @@ let config = {
 
 const s3 = new aws.S3()
 
-const fileFilter = (req: any, file: any, cb: Function) => {
-    if (file.mimeType == "image/jpeg" || file.mimeType == "image/png") {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: Function) => {
+    if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
         cb(null, true)
     } else {
         cb(new Error("Invalid File Type"), false)
