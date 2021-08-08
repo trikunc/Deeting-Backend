@@ -1,12 +1,12 @@
 name: Deploy branch master to server
 
 on:
-  pull_request:
+  push:
     branches:
       - 'develop'
 
 jobs:
-  deploy:
+  build:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: [ubuntu-latest]
     steps:
