@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { generateAccessToken } from "../../helper/genarateAccessToken";
 import { comparePassword } from "../../helper/hashing_password";
-import { loginService } from "../../services/auth.service";
+import { loginService } from "../../services/auth/auth.service";
 
 class AuthController {
     /**
