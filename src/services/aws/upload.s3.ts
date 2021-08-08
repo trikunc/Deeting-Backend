@@ -8,7 +8,8 @@ import multers3 from "multer-s3"
 let config = {
     secretAccessKey: process.env.AWS_ACCESS_KEY_ID as string,
     accessKeyId: process.env.AWS_SECRET_KEY as string,
-    region: process.env.AWS_REGION_NAME as string
+    region: process.env.AWS_REGION_NAME as string,
+    bucket: process.env.AWS_BUCKET_NAME as string,
 }
 
 const s3 = new aws.S3()
@@ -26,7 +27,7 @@ const upload = multer({
     storage: multers3({
       acl: 'public-read',
       s3,
-      bucket: 'bwm-ng-dev',
+      bucket: config.bucket,
       metadata: function (req, file, cb) {
         cb(null, {fieldName: 'TESTING_METADATA'});
       },
