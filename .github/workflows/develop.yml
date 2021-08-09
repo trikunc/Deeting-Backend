@@ -1,9 +1,10 @@
 name: Deploy branch master to server
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - 'develop'
+      - develop
 
 jobs:
   deploy:
@@ -11,6 +12,8 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
+        with:
+          ref: develop
       - name: Merge to develop server
         uses: appleboy/ssh-action@master
         with:
