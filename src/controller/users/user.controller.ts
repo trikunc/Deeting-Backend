@@ -2,7 +2,7 @@ import { User } from "entity/User"
 import { Request, Response } from "express"
 import { hashingPassword } from "../../helper/hashing_password"
 import { WebResponse } from "../../models/WebResponse"
-import { getAllUser, getUser as getUserServices, registerUser, updateProfileService } from "../../services/user.services"
+import { getAllUser, getUser as getUserServices, registerUser, updateProfileService } from "../../services/users/user.services"
 
 class UserController {
     /**

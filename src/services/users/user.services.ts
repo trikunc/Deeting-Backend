@@ -1,5 +1,5 @@
 import { User } from "entity/User"
-import { knex as connection } from "../../database"
+import { knex as connection } from "../../../database"
 
 /**
  * inser user

@@ -7,7 +7,7 @@ import { hashingPassword } from "../../src/helper/hashing_password";
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     await knex("users").del();
-    for (let index = 1; index <= 100; index++) {
+    for (let index = 1; index <= 10; index++) {
         await knex("users").insert([
             {
                 username: faker.name.findName(),
