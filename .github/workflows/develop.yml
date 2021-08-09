@@ -1,4 +1,4 @@
-name: Deploy branch master to server
+name: Deploy branch develop to server
 
 on:
   pull_request:
