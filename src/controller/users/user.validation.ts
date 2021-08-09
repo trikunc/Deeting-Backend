@@ -5,15 +5,17 @@ const validation = joi.object({
     username: joi.string().alphanum().min(3).max(25).trim(true).required(),
     email: joi.string().email().trim(true).required(),
     password: joi.string().min(8).trim(true).required(),
+    password_confirmation: joi.string().valid(joi.ref("password")).required(),
     displayName: joi.string()
 })
 
 export const userValidation = (req: Request, res: Response, next: NextFunction) => {
     const validationResult = validation.validate({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        displayName: req.body.displayName,
+        username:              req.body.username,
+        email:                 req.body.email,
+        password:              req.body.password,
+        displayName:           req.body.displayName,
+        password_confirmation: req.body.password_confirmation,
     })
 
     if (validationResult.error) {
