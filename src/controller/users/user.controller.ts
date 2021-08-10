@@ -1,12 +1,12 @@
 import { User } from "entity/User"
 import { Request, Response } from "express"
-import SendingMailService from "../../services/mail/SendingMail"
 import { hashingPassword } from "../../helper/hashing_password"
 import { WebResponse } from "../../models/WebResponse"
 import { getAllUser, getUser as getUserServices, registerUser, updateProfileService } from "../../services/users/user.services"
+import { mail } from "../../utils/mail"
 
 class UserController {
-   async getUser(req: Request, res: Response) {
+    async getUser(req: Request, res: Response) {
         let { id } = req.params
         let user = await getUserServices(id)
         return WebResponse.success(res, user)
@@ -15,19 +15,20 @@ class UserController {
     /**
      * get all user
     */
-   async users(req: Request, res: Response) {
+    async users(req: Request, res: Response) {
         let users = await getAllUser()
         return WebResponse.success(res, users)
     }
 
-   /**
-    * Create User
-    * @param {Request} req 
-    * @param {Response} res
-   */
-   async createUser(req: Request, res: Response) {
+    /**
+     * Create User
+     * @param {Request} req 
+     * @param {Response} res
+    */
+    async createUser(req: Request, res: Response) {
         let { body } = req
         let password = await hashingPassword(req.body.password)
+
         let encrypted: User = {
             username: body.username,
             email: body.email,
@@ -37,12 +38,10 @@ class UserController {
         }
 
         try {
+            // register user
             await registerUser(encrypted)
-            await SendingMailService.sendMail({
-                from: "hasryawi@gmail.com",
-                to: "hasyrawi@gmail.com", subject: "Terima kasih telah mendaftar", html: "Terima kasih telah mendaftar di kami, silahkan login untuk mengakses aplikasi",
-                text: "Test"
-            })
+            // Sending email
+            mail(body.email, "Thanks for Registrasion", "Thanks For Registrasion")
         } catch (error) {
             return res.status(500).json({
                 message: error.message

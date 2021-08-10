@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer"
+import nodemailer, { Transporter } from "nodemailer"
 
 type MailOptions = {
     from: string,
@@ -9,16 +9,17 @@ type MailOptions = {
 }
 
 class SendingMailService {
-
-    private transport = nodemailer.createTransport({
-        host: "smtp.mailgun.org",
-        port: 587,
-        auth: {
-            user: "postmaster@sandboxe9f1c5368c5a4cab93950dbf8b5600e9.mailgun.org",
-            pass: "fbd64dee1d467579db62c0b775a4e7ed-c485922e-b740fb7d",
-        }
-    })
-
+    private transport: Transporter
+    constructor(host: string, user: string, password: string) {
+        this.transport = nodemailer.createTransport({
+            host: host,
+            port: 587,
+            auth: {
+                user: user,
+                pass: password,
+            }
+        })
+    }
     /**
      * Sending Mail
      * @param  {MailOptions} options
@@ -28,10 +29,10 @@ class SendingMailService {
             if (err) {
                 console.log(err)
             } else {
-                console.log(info.response)
+                console.log(info)
             }
         })
     }
 }
 
-export default new SendingMailService()
+export default  SendingMailService
