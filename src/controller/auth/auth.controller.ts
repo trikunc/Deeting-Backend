@@ -1,58 +1,41 @@
 import { Request, Response } from "express";
+import { getRolesService } from "../../services/roles/roles.service";
 import { generateAccessToken } from "../../helper/genarateAccessToken";
 import { comparePassword } from "../../helper/hashing_password";
 import { loginService } from "../../services/auth/auth.service";
 
+type RoleResponse = {
+    role_name: string;
+}
+
 class AuthController {
-    /**
-    * @swagger
-    * /login:
-    *  post:
-    *      description: User Login
-    *      tags: [ "auth" ]
-    *      consumes: 
-    *         - application/json
-    *      parameters:
-    *          - in: body
-    *            name: "Request Body"
-    *            description: "User Login"
-    *            schema:
-    *              type: object
-    *              required:
-    *                  - username
-    *              properties:
-    *                  email:
-    *                    type: string
-    *                  password:
-    *                    type: string
-    *      responses:
-    *          '201':
-    *              description: user received and uploaded successfully
-    *          '400':
-    *              description: user data is missing or invalid
-    *          '500':
-    *              description: Internal server error
-    */
+
     async login(req: Request, res: Response) {
         const { email, password } = req.body;
         try {
-            loginService(email).then(user => {
-                comparePassword(password, user.password)
-                    .then(isMatch => {
-                        let token = generateAccessToken({
-                            id: user.id,
-                            name: user.username,
-                            email: user.email,
-                            roles: { name: "admin" } // todo change to roles from database 
-                        })
+            let result = await loginService(email)
+            let isMatching = await comparePassword(password, result.password)
+            let roleResult: RoleResponse[] = await getRolesService(result.id)
 
-                        return isMatch ? res.json(token) : res.status(401).json({ err: "Password Not Match" })
-                    })
+            // Manipulate the result to get the role name as single array
+            let roles: string[] = []
+            roleResult.forEach(role => {
+                roles.push(role.role_name)
             })
+
+            // Check the password is correct / or matching
+            if (!isMatching) { return res.status(401).json({ err: "Password Not Match" }) }
+            if (isMatching) {
+                let token = generateAccessToken({
+                    id: result.id,
+                    name: result.username,
+                    email: result.email,
+                    roles: roles
+                })
+                return res.json(token)
+            }
         } catch (error) {
-            return res.status(400).json({
-                message: error.message
-            })
+            return res.status(400).json({ err: error.message })
         }
     }
 }
