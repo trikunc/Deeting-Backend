@@ -24,8 +24,11 @@ router.get("/users/:id", [authMiddleware], userController.getUser)
 
 // Auth
 router.post("/login", [authValidation], authController.login)
+
 // Roles
-router.get("/roles/:user_id", rolesController.getRoles)
+router.post("/roles/assignRole",        rolesController.assignRoles)
+router.post("/roles/revokeRole",        rolesController.revokeRoles)
+router.get("/roles/:user_id",           rolesController.getRoles)
 
 
 export default router;
