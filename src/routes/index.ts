@@ -6,6 +6,7 @@ import authController from "../controller/auth/auth.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { authValidation } from "../controller/auth/auth.validation";
 import rolesController from "../controller/roles/roles.controller";
+import { roleMiddleware } from "../middleware/role.middleware";
 
 
 const router = Router()
@@ -24,8 +25,11 @@ router.get("/users/:id", [authMiddleware], userController.getUser)
 
 // Auth
 router.post("/login", [authValidation], authController.login)
+
 // Roles
-router.get("/roles/:user_id", rolesController.getRoles)
+router.post("/roles/assignRole", [roleMiddleware],rolesController.assignRoles)
+router.post("/roles/revokeRole", [roleMiddleware],rolesController.revokeRoles)
+router.get("/roles/:user_id",    [roleMiddleware],rolesController.getRoles)
 
 
 export default router;
