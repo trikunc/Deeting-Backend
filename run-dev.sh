@@ -1,4 +1,5 @@
 #/bin/bash
 
-yarn migrate:up
-yarn seed:run
+docker-compose exec web yarn migrate:down
+docker-compose exec web yarn migrate:up
+docker-compose exec web yarn seed:run
