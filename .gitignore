@@ -4,4 +4,5 @@ package-lock.json
 pgdata
 yarn.lock
 .env
+.env.docker
 build
