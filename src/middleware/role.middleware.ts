@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken"
 
+type decodeJWt = {
+    roles: string[],
+}
 /**
  * @author    Hanan asyrawi
  * @param     req: Request
@@ -22,14 +25,18 @@ export const roleMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     jwt.verify(token, process.env.TOKEN_SECRET as string, (err, decoded) => {
-
-        type decodeJWt = {
-            roles: string[],
+        
+        // Make sure the token is valid
+        if (typeof decoded == "undefined") {
+            return res.status(401).json({
+                error: 401,
+                message: "Token is Invalid"
+            })
         }
 
         let { roles } = decoded as decodeJWt
 
-        if(!roles.includes("admin")) {
+        if (!roles.includes("admin")) {
             return res.status(401).json({
                 error: 401,
                 message: "You are not authorized to access this resource"

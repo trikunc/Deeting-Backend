@@ -38,9 +38,9 @@ class RolesController {
     }
     // Delete Roles From User / Delete Roles
     async revokeRoles(req: Request, res: Response , next: NextFunction) {
-        rolesValidationPost(req, res, next)
         let { user_id, role_id } = req.body
         try {
+            rolesValidationPost(req, res, next)
             await revokeRolesService(user_id, role_id)
             return WebResponse.success(res, {
                 message: "Roles Revoked Successfully"
