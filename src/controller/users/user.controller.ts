@@ -7,9 +7,10 @@ import {
   getAllUser,
   getUser as getUserServices,
   registerUser,
-  updateActiveUser,
+
   updateProfileService,
 } from '../../services/users/user.services';
+import { updateActiveUser } from '../../services/mail/mail.services'
 import { mail } from '../../utils/mail';
 import jwt from 'jsonwebtoken';
 
@@ -43,7 +44,6 @@ class UserController {
       password: password,
       displayName: body.displayName,
       avatar: body.avatar,
-      isActive: body.isActive,
     };
 
     try {
@@ -51,14 +51,13 @@ class UserController {
       await registerUser(encrypted);
       // Sending email
       const token = generateMailToken(body.username, body.email, password);
-      console.log(token);
-      const url = `http://localhost:5000/activation/${token}`;
+      const url = process.env.NODE_ENV === 'development' ? `${process.env.URL_PROD}/activation/${token}` : `${process.env.URL_DEV}/activation/${token}`;
       mail(
         body.email,
         'Thanks for Registrasion',
         `
             <h1>Thanks For Registrasion<h1/>
-            <p>Please activate to link <a>localhost:${url}</a><p/>
+            <p>Please activate to link <a href="${url}">${url}</a><p/>
         `
       );
     } catch (error) {
@@ -88,7 +87,6 @@ class UserController {
       password: password,
       displayName: body.displayName,
       avatar: body.avatar,
-      isActive: body.isActive,
     };
 
     await updateProfileService(parseInt(id), user);
@@ -104,9 +102,6 @@ class UserController {
   async mailActivation(req: Request, res: Response) {
     const { token } = req.params;
 
-    console.log(token);
-
-    // if (token) {
     jwt.verify(
       token,
       process.env.TOKEN_SECRET as string,
@@ -122,11 +117,6 @@ class UserController {
         }
       }
     );
-    // } else {
-    //   return res.json({
-    //     message: 'error happening please try again',
-    //   });
-    // }
   }
 }
 

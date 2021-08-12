@@ -19,11 +19,7 @@ router.get('', (req: Request, res: Response) => {
 // User
 router.get('/users', [authMiddleware], userController.users);
 router.post('/users', [userValidation], userController.createUser);
-router.put(
-  '/users/:id',
-  [authMiddleware, userValidation],
-  userController.updateProfile
-);
+router.put('/users/:id', [authMiddleware, userValidation], userController.updateProfile);
 router.get('/users/:id', [authMiddleware], userController.getUser);
 router.get('/activation/:token', userController.mailActivation);
 

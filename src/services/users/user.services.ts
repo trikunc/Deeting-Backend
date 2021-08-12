@@ -43,26 +43,9 @@ const updateProfileService = async (userId: number, user: object) => {
     .update(user);
 };
 
-const updateActiveUser = async (
-  username: string,
-  email: string,
-  password: string
-) => {
-  return connection<User>('users')
-    .where({
-      username: username,
-      email: email,
-      password: password,
-    })
-    .update({
-      isActive: true,
-    });
-};
-
 export {
   registerUser,
   getUser,
   getAllUser,
   updateProfileService,
-  updateActiveUser,
 };

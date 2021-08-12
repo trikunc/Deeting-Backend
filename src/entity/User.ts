@@ -5,5 +5,5 @@ export type User = {
   email: string;
   password: string;
   avatar: string;
-  isActive: boolean;
+  isActive?: boolean;
 };
