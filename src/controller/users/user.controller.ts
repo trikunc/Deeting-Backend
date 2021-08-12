@@ -61,6 +61,11 @@ class UserController {
         `
       );
     } catch (error) {
+      if (error.code == "ER_DUP_ENTRY") {
+        return res.status(403).json({
+          message: "Email already registered",
+        });
+      }
       return res.status(500).json({
         message: error.message,
       });
