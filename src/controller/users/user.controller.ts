@@ -51,7 +51,7 @@ class UserController {
       await registerUser(encrypted);
       // Sending email
       const token = generateMailToken(body.email);
-      const url = process.env.NODE_ENV === 'development' ? `${process.env.URL_PROD}/activation/${token}` : `${process.env.URL_DEV}/activation/${token}`;
+      const url = process.env.NODE_ENV as string === 'prod' ? `${process.env.URL_PROD}/activation/${token}` : `${process.env.URL_DEV}/activation/${token}`;
       mail(
         body.email,
         'Thanks for Registrasion',
@@ -114,6 +114,7 @@ class UserController {
         } else {
           const { email } = decoded;
           updateActiveUser(email);
+          return res.send("Accout Has Active")
         }
       }
     );
