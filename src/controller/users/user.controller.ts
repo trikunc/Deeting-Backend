@@ -50,7 +50,7 @@ class UserController {
       // register user
       await registerUser(encrypted);
       // Sending email
-      const token = generateMailToken(body.username, body.email, password);
+      const token = generateMailToken(body.email);
       const url = process.env.NODE_ENV === 'development' ? `${process.env.URL_PROD}/activation/${token}` : `${process.env.URL_DEV}/activation/${token}`;
       mail(
         body.email,
@@ -112,8 +112,8 @@ class UserController {
             errors: 'Expired link. Signup again',
           });
         } else {
-          const { username, email, password } = decoded;
-          updateActiveUser(username, email, password);
+          const { email } = decoded;
+          updateActiveUser(email);
         }
       }
     );
