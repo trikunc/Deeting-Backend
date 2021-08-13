@@ -8,7 +8,6 @@ import { updateActiveUser } from '../../services/mail/mail.services'
 import { mail } from '../../utils/mail';
 import jwt from 'jsonwebtoken';
 import { knex as connection } from '../../../database';
-import { AnyNsRecord } from 'dns';
 
 class UserController {
   async getUser(req: Request, res: Response) {
