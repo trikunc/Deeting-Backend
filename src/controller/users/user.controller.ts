@@ -131,13 +131,16 @@ class UserController {
       connection<User>('users')
         .where({
           email: email,
-          isActive: true,
+          // isActive: true,
         })
         .first()
         .then(user => {
-          if (!user) {
-            return res.status(400).send("user with given email doesn't exist ");
-          }
+
+          if (!user) return res.status(400).send({ message: "user with given email doesn't exist " });
+
+          let { isActive } = JSON.parse(JSON.stringify(user))
+          if (isActive == "false") return res.status(400).send({ message: "please activate your email" });
+
           else {
             // Generate token
             const token = generateMailToken(email);
