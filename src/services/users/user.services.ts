@@ -43,9 +43,18 @@ const updateProfileService = async (userId: number, user: object) => {
     .update(user);
 };
 
+const updatePassword = async (userId: number, password: string) => {
+  return connection<User>('users')
+    .where({
+      id: userId,
+    })
+    .update({ password });
+};
+
 export {
   registerUser,
   getUser,
   getAllUser,
   updateProfileService,
+  updatePassword,
 };

@@ -1,18 +1,13 @@
 import { User } from 'entity/User';
 import { Request, Response } from 'express';
-import { generateMailToken } from '../../helper/generateMailToken';
+import { generateMailToken, resetPassToken } from '../../helper/generateMailToken';
 import { hashingPassword } from '../../helper/hashing_password';
 import { WebResponse } from '../../models/WebResponse';
-import {
-  getAllUser,
-  getUser as getUserServices,
-  registerUser,
-
-  updateProfileService,
-} from '../../services/users/user.services';
+import { getAllUser, getUser as getUserServices, registerUser, updatePassword, updateProfileService } from '../../services/users/user.services';
 import { updateActiveUser } from '../../services/mail/mail.services'
 import { mail } from '../../utils/mail';
 import jwt from 'jsonwebtoken';
+import { knex as connection } from '../../../database';
 
 class UserController {
   async getUser(req: Request, res: Response) {
@@ -120,6 +115,74 @@ class UserController {
           const { email } = decoded;
           updateActiveUser(email);
           return res.send("Accout Has Active")
+        }
+      }
+    );
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    let { email } = req.body;
+    let test: any
+
+    try {
+      // Check email if exist
+      let resultUser: User
+
+      connection<User>('users')
+        .where({
+          email: email,
+          isActive: true,
+        })
+        .first()
+        .then(user => {
+          if (!user) {
+            return res.status(400).send("user with given email doesn't exist ");
+          }
+          else {
+            let resultUser = JSON.parse(JSON.stringify(user))
+            let id = resultUser.id;
+            // Generate token
+            const token = resetPassToken(id, email);
+            const url = process.env.NODE_ENV as string === 'prod' ? `${process.env.URL_PROD}/password-reset/${id}/${token}` : `${process.env.URL_DEV}/password-reset/${id}/${token}`;
+            console.log(url)
+            // Sending email
+            console.log(url);
+            mail(
+              email,
+              'Password Reset',
+              `
+                <h1>Password Reset<h1/>
+                <p>Follow this link to reset your password <a href="${url}">${url}</a><p/>
+            `
+            );
+            return res.send("password reset link sent to your email account");
+          }
+        })
+
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+  }
+
+
+  async newPassword(req: Request, res: Response) {
+    const { token } = req.params;
+    let password = await hashingPassword(req.body.password);
+
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as string,
+      (err: any, decoded: any) => {
+        if (err) {
+          return res.status(401).json({
+            errors: 'invalid link or expired',
+          });
+        } else {
+          const { id, email } = decoded;
+          updatePassword(id, password);
+          return res.send("Password has been updated")
         }
       }
     );
