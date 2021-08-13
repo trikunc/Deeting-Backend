@@ -8,7 +8,7 @@ import { authValidation } from '../controller/auth/auth.validation';
 import rolesController from '../controller/roles/roles.controller';
 import { roleMiddleware } from '../middleware/role.middleware';
 import { mailValidation } from '../controller/mail/mail.validation';
-import { resetpassValidation } from '../controller/mail/resetpass.validation';
+import { resetPassValidation } from '../controller/mail/reset.pass.validation';
 
 const router = Router();
 
@@ -28,7 +28,7 @@ router.get('/activation/:token', userController.mailActivation);
 // Auth
 router.post('/login', [authValidation], authController.login);
 router.post('/password-reset', [mailValidation], userController.resetPassword);
-router.put('/password-reset/:id/:token', [resetpassValidation], userController.newPassword)
+router.put('/password-reset/:token', [resetPassValidation], userController.newPassword)
 
 // Roles
 router.post('/roles/assignRole', [roleMiddleware], rolesController.assignRoles);

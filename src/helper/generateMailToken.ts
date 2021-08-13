@@ -15,13 +15,4 @@ const generateMailToken = (email: string) => {
   );
 };
 
-const resetPassToken = (id: number, email: string) => {
-  let token = jwt.sign(
-    { id, email },
-    process.env.TOKEN_SECRET as string,
-    { expiresIn: '1800s', issuer: 'JWT' }
-  );
-  return token
-};
-
-export { generateMailToken, resetPassToken };
+export { generateMailToken };

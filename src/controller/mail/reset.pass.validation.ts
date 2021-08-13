@@ -5,7 +5,7 @@ const validation = joi.object({
   password: joi.string().min(8).trim(true).required(),
 })
 
-export const resetpassValidation = (req: Request, res: Response, next: NextFunction) => {
+export const resetPassValidation = (req: Request, res: Response, next: NextFunction) => {
   const validationResult = validation.validate({
     password: req.body.password,
   })

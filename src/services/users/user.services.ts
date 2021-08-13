@@ -43,10 +43,10 @@ const updateProfileService = async (userId: number, user: object) => {
     .update(user);
 };
 
-const updatePassword = async (userId: number, password: string) => {
+const updatePassword = async (email: string, password: string) => {
   return connection<User>('users')
     .where({
-      id: userId,
+      email: email,
     })
     .update({ password });
 };

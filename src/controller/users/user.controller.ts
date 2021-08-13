@@ -1,6 +1,6 @@
 import { User } from 'entity/User';
 import { Request, Response } from 'express';
-import { generateMailToken, resetPassToken } from '../../helper/generateMailToken';
+import { generateMailToken } from '../../helper/generateMailToken';
 import { hashingPassword } from '../../helper/hashing_password';
 import { WebResponse } from '../../models/WebResponse';
 import { getAllUser, getUser as getUserServices, registerUser, updatePassword, updateProfileService } from '../../services/users/user.services';
@@ -8,6 +8,7 @@ import { updateActiveUser } from '../../services/mail/mail.services'
 import { mail } from '../../utils/mail';
 import jwt from 'jsonwebtoken';
 import { knex as connection } from '../../../database';
+import { AnyNsRecord } from 'dns';
 
 class UserController {
   async getUser(req: Request, res: Response) {
@@ -139,11 +140,9 @@ class UserController {
             return res.status(400).send("user with given email doesn't exist ");
           }
           else {
-            let resultUser = JSON.parse(JSON.stringify(user))
-            let id = resultUser.id;
             // Generate token
-            const token = resetPassToken(id, email);
-            const url = process.env.NODE_ENV as string === 'prod' ? `${process.env.URL_PROD}/password-reset/${id}/${token}` : `${process.env.URL_DEV}/password-reset/${id}/${token}`;
+            const token = generateMailToken(email);
+            const url = process.env.NODE_ENV as string === 'prod' ? `${process.env.URL_PROD}/password-reset/${token}` : `${process.env.URL_DEV}/password-reset/${token}`;
             console.log(url)
             // Sending email
             console.log(url);
@@ -171,21 +170,18 @@ class UserController {
     const { token } = req.params;
     let password = await hashingPassword(req.body.password);
 
-    jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as string,
-      (err: any, decoded: any) => {
-        if (err) {
-          return res.status(401).json({
-            errors: 'invalid link or expired',
-          });
-        } else {
-          const { id, email } = decoded;
-          updatePassword(id, password);
-          return res.send("Password has been updated")
-        }
-      }
-    );
+    try {
+      let verification = await JSON.stringify(jwt.verify(token, process.env.TOKEN_SECRET as string))
+      const email = JSON.parse(verification).email;
+
+      updatePassword(email, password);
+      return res.send("Password has been updated")
+
+    } catch (e) {
+      return res.status(401).json({
+        errors: 'invalid link or expired',
+      });
+    }
   }
 }
 
